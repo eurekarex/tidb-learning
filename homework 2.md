@@ -23,6 +23,8 @@ ID              Role          Host      Ports                            OS/Arch
 10.0.0.6:20160  tikv          10.0.0.6  20160/20180                      linux/x86_64  Up       data                     deploy/tikv-20160
 10.0.0.7:20160  tikv          10.0.0.7  20160/20180                      linux/x86_64  Up       data                     deploy/tikv-20160
 ```
+实例性能分析
+![实例性能分析](resource/profiling_1_1_tidb_10_0_0_4_4000662501212.svg)
 
 所有以下测试结果都是在该集群（tidb-class）上得出的数据。
 
@@ -324,12 +326,13 @@ PAYMENT - Takes(s): 849.8, Count: 28151, TPM: 1987.6, Sum(ms): 4775875, Avg(ms):
 PAYMENT_ERR - Takes(s): 0.0, Count: 4, TPM: 5184.2, Sum(ms): 134, Avg(ms): 33, 95th(ms): 64, 99th(ms): 64, 99.9th(ms): 64
 STOCK_LEVEL - Takes(s): 849.7, Count: 2697, TPM: 190.4, Sum(ms): 62555, Avg(ms): 23, 95th(ms): 48, 99th(ms): 96, 99.9th(ms): 512
 ```
-![TiDB Summary QPS截图](resource/homework_2_tidb_tpcc_qps)
-![TiDB Summary Duration截图](resource/homework_2_tidb_tpcc_duration)
-![TiKV Details Server CPU截图](resource/homework_2_tikv_tpcc_cpu)
-![TiKV Details Server QPS截图](resource/homework_2_tikv_tpcc_qps)
-![TiKV Details gRPS QPS截图](resource/homework_2_tikv_tpcc_grpc_qps)
-![TiKV Details gRPS duration截图](resource/homework_2_tikv_tpcc_grpc_duration)
+### Grafana Dashboard截图
+![TiDB Summary QPS截图](resource/homework_2_tidb_tpcc_qps.png)
+![TiDB Summary Duration截图](resource/homework_2_tidb_tpcc_duration.png)
+![TiKV Details Server CPU截图](resource/homework_2_tikv_tpcc_cpu.png)
+![TiKV Details Server QPS截图](resource/homework_2_tikv_tpcc_qps.png)
+![TiKV Details gRPS QPS截图](resource/homework_2_tikv_tpcc_grpc_qps.png)
+![TiKV Details gRPS duration截图](resource/homework_2_tikv_tpcc_grpc_duration.png)
 ### tpch数据准备
 受限于集群计算能力，我把scale factor设置为4。
 > go-tpc tpch -H 10.0.0.4 -P 4000 -D tpch --sf 4 prepare
@@ -367,12 +370,13 @@ Q8_ERR - Takes(s): 0.1, Count: 1, TPM: 425.8, Sum(ms): 993785, Avg(ms): 993785, 
 Q9     - Takes(s): 989.1, Count: 1, TPM: 0.1, Sum(ms): 108723, Avg(ms): 108723, 95th(ms): 16000, 99th(ms): 16000, 99.9th(ms): 16000
 Q9_ERR - Takes(s): 0.5, Count: 1, TPM: 132.1, Sum(ms): 975705, Avg(ms): 975705, 95th(ms): 16000, 99th(ms): 16000, 99.9th(ms): 16000
 ```
-![TiDB Summary QPS截图](resource/homework_2_tidb_tpch_qps)
-![TiDB Summary Duration截图](resource/homework_2_tidb_tpch_duration)
-![TiKV Details Server CPU截图](resource/homework_2_tikv_tpch_cpu)
-![TiKV Details Server QPS截图](resource/homework_2_tikv_tpch_qps)
-![TiKV Details gRPS QPS截图](resource/homework_2_tikv_tpch_grpc_qps)
-![TiKV Details gRPS duration截图](resource/homework_2_tikv_tpch_grpc_duration)
+![TiDB Summary QPS截图](resource/homework_2_tidb_tpch_qps.png)
+![TiDB Summary Duration截图](resource/homework_2_tidb_tpch_duration.png)
+![TiKV Details Server CPU截图](resource/homework_2_tikv_tpch_cpu.png)
+![TiKV Details Server QPS截图](resource/homework_2_tikv_tpch_qps.png)
+![TiKV Details gRPS QPS截图](resource/homework_2_tikv_tpch_grpc_qps.png)
+![TiKV Details gRPS duration截图](resource/homework_2_tikv_tpch_grpc_duration.png)
 
 ### 总结
-CPU再次成为我测试集群的瓶颈。不同于之前的测试，CPU在TiDB和TiKV节点都保持在很高的使用率。测试数据准备的过程消耗非常多的时间，我认为这是受制于内存和IO的限制。在这个测试的过程中，TiDB节点还出现了一次死机的情形，Azure尝试修复没有成功，最后只能重启。后来检查原因应该是CPU负载太高，无法响应服务 ![CPU负载100%无法](resource/homework_2_tpc_no_response).
+CPU再次成为我测试集群的瓶颈。不同于之前的测试，CPU在TiDB和TiKV节点都保持在很高的使用率。测试数据准备的过程消耗非常多的时间，我认为这是受制于内存和IO的限制。在这个测试的过程中，TiDB节点还出现了一次死机的情形，Azure尝试修复没有成功，最后只能重启。后来检查原因应该是CPU负载太高，无法响应服务.
+![CPU负载100%无法](resource/homework_2_tpc_no_response.png)
